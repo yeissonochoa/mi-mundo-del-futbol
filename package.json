@@ -1,7 +1,7 @@
 {
   "name": "mi-mundo-del-futbol",
   "version": "1.0.0",
-  "description": "Página web personal sobre fútbol — Proyecto de Aplicación Asturias",
+  "description": "Página web personal sobre fútbol — Proyecto de Aplicación uniasturias",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
