@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Mundo del Fútbol ⚽</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #00c853;
+      --verde-oscuro: #1b5e20;
+      --negro: #0a0a0a;
+      --blanco: #f5f5f5;
+      --gris: #1c1c1c;
+      --acento: #ffeb3b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--negro);
+      color: var(--blanco);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ======= HEADER ======= */
+    header {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .campo-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at center, rgba(0,200,83,0.12) 0%, transparent 70%),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 9.09%,
+          rgba(255,255,255,0.03) 9.09%,
+          rgba(255,255,255,0.03) 9.19%
+        ),
+        var(--negro);
+      z-index: 0;
+    }
+
+    /* Líneas del campo de fútbol decorativas */
+    .campo-lines {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .campo-lines::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 220px;
+      height: 220px;
+      border: 2px solid rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+    .campo-lines::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--verde);
+      color: var(--negro);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 15vw, 12rem);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--blanco);
+      animation: fadeDown 0.6s ease 0.1s both;
+    }
+
+    h1 span {
+      color: var(--verde);
+      display: block;
+    }
+
+    .header-sub {
+      font-size: 1.1rem;
+      color: rgba(245,245,245,0.6);
+      max-width: 500px;
+      margin: 1.5rem auto 0;
+      line-height: 1.6;
+      animation: fadeDown 0.6s ease 0.2s both;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+    .scroll-hint::after {
+      content: '↓';
+      font-size: 1.2rem;
+    }
+
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ======= NAV ======= */
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,200,83,0.2);
+      z-index: 100;
+      padding: 1rem 2rem;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    nav a {
+      color: rgba(245,245,245,0.6);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--verde); }
+
+    /* ======= SECTIONS ======= */
+    section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--verde);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ======= INTRO ======= */
+    #intro {
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .intro-text p {
+      color: rgba(245,245,245,0.7);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .stat-box {
+      background: var(--gris);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      color: var(--verde);
+      display: block;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(245,245,245,0.5);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .intro-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    /* ======= GALERÍA ======= */
+    #galeria {
+      background: var(--gris);
+      max-width: 100%;
+      padding: 5rem 0;
+    }
+    #galeria > * {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding: 0 2rem;
+      max-width: 1100px;
+      margin-inline: auto;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      background: #111;
+      cursor: pointer;
+      group: true;
+    }
+
+    .gallery-item:first-child {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      min-height: 180px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+      filter: grayscale(30%);
+    }
+
+    .gallery-item:hover .gallery-img {
+      transform: scale(1.05);
+      filter: grayscale(0%);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    .gallery-caption {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--verde);
+    }
+
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:first-child { grid-column: span 2; grid-row: span 1; }
+    }
+
+    /* ======= FORMULARIO ======= */
+    #comentarios {
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .form-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,245,245,0.5);
+    }
+
+    input, textarea, select {
+      background: var(--gris);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--blanco);
+      padding: 0.85rem 1rem;
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 2px;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--verde);
+    }
+
+    textarea { resize: vertical; min-height: 120px; }
+
+    select option { background: var(--gris); }
+
+    .btn-submit {
+      background: var(--verde);
+      color: var(--negro);
+      border: none;
+      padding: 1rem 2rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      align-self: flex-start;
+    }
+
+    .btn-submit:hover { background: #69f0ae; transform: translateY(-2px); }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* ======= COMENTARIOS LISTA ======= */
+    .comments-list-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: rgba(245,245,245,0.5);
+    }
+
+    #lista-comentarios {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    #lista-comentarios::-webkit-scrollbar { width: 4px; }
+    #lista-comentarios::-webkit-scrollbar-track { background: transparent; }
+    #lista-comentarios::-webkit-scrollbar-thumb { background: var(--verde); }
+
+    .comment-card {
+      background: var(--gris);
+      border-left: 3px solid var(--verde);
+      padding: 1rem 1.2rem;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .comment-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .comment-author {
+      font-weight: 700;
+      color: var(--verde);
+      font-size: 0.9rem;
+    }
+
+    .comment-equipo {
+      font-size: 0.7rem;
+      color: rgba(245,245,245,0.4);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.05);
+      padding: 0.2rem 0.6rem;
+    }
+
+    .comment-text {
+      color: rgba(245,245,245,0.75);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .comment-date {
+      font-size: 0.7rem;
+      color: rgba(245,245,245,0.3);
+      margin-top: 0.5rem;
+    }
+
+    .no-comments {
+      color: rgba(245,245,245,0.3);
+      text-align: center;
+      padding: 3rem 0;
+      font-style: italic;
+    }
+
+    .msg-success {
+      background: rgba(0,200,83,0.15);
+      border: 1px solid var(--verde);
+      color: var(--verde);
+      padding: 0.8rem 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .form-container { grid-template-columns: 1fr; }
+    }
+
+    /* ======= FOOTER ======= */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: rgba(245,245,245,0.3);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+    }
+
+    footer span { color: var(--verde); }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <header>
+    <div class="campo-bg"></div>
+    <div class="campo-lines"></div>
+    <div class="header-content">
+      <div class="badge">⚽ Mi hobby favorito</div>
+      <h1>EL <span>FÚTBOL</span></h1>
+      <p class="header-sub">La pasión que mueve al mundo. Noventa minutos de emoción, sudor y goles que hacen historia.</p>
+    </div>
+    <div class="scroll-hint">Explorar</div>
+  </header>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <ul>
+      <li><a href="#intro">Sobre el Fútbol</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#comentarios">Comentarios</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== INTRO ===== -->
+  <section id="intro">
+    <div class="intro-grid">
+      <div class="intro-text">
+        <p class="section-label">— Mi pasión</p>
+        <h2>El Deporte<br>Rey del Mundo</h2>
+        <p>El fútbol es mucho más que un juego: es cultura, identidad y emoción compartida. Desde los potreros del barrio hasta los grandes estadios, este deporte une a millones de personas alrededor del planeta.</p>
+        <p>Me apasiona el fútbol desde niño. La adrenalina de un partido, la habilidad de los jugadores, la táctica de los entrenadores y el rugido de los hinchas son experiencias únicas que ningún otro deporte puede replicar.</p>
+        <p>Cada partido es una historia diferente. Cada gol, un momento que puede cambiar el destino de un equipo, una ciudad, incluso un país.</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-num">3.5B</span>
+          <span class="stat-label">Fanáticos en el mundo</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">211</span>
+          <span class="stat-label">Federaciones FIFA</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">90'</span>
+          <span class="stat-label">Minutos de magia</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">1863</span>
+          <span class="stat-label">Año de fundación</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALERÍA ===== -->
+  <div id="galeria">
+    <div>
+      <p class="section-label">— Imágenes</p>
+      <h2>Galería</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img class="gallery-img" src="https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?w=800&q=80" alt="Estadio lleno" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-caption">Noche de Champions</span></div>
+      </div>
+      <div class="gallery-item">
+        <img class="gallery-img" src="https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=500&q=80" alt="Balón de fútbol" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-caption">El balón sagrado</span></div>
+      </div>
+      <div class="gallery-item">
+        <img class="gallery-img" src="https://images.unsplash.com/photo-1614632537423-1e6c2e7e0aab?w=500&q=80" alt="Jugador en acción" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-caption">En acción</span></div>
+      </div>
+      <div class="gallery-item">
+        <img class="gallery-img" src="https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=500&q=80" alt="Gol" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-caption">¡Gol!</span></div>
+      </div>
+      <div class="gallery-item">
+        <img class="gallery-img" src="https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=500&q=80" alt="Hinchas" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-caption">La hinchada</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COMENTARIOS ===== -->
+  <section id="comentarios">
+    <p class="section-label">— Participa</p>
+    <h2>Deja tu<br>Comentario</h2>
+    <div class="form-container">
+
+      <form id="comentario-form">
+        <div class="field">
+          <label for="nombre">Tu nombre</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Ej: Carlos Pérez" required>
+        </div>
+        <div class="field">
+          <label for="equipo">Tu equipo favorito</label>
+          <select id="equipo" name="equipo">
+            <option value="Real Madrid">Real Madrid</option>
+            <option value="Barcelona">FC Barcelona</option>
+            <option value="Manchester City">Manchester City</option>
+            <option value="Bayern Munich">Bayern Munich</option>
+            <option value="PSG">Paris Saint-Germain</option>
+            <option value="Nacional">Atlético Nacional</option>
+            <option value="América de Cali">América de Cali</option>
+            <option value="Millonarios">Millonarios FC</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="comentario">Tu comentario</label>
+          <textarea id="comentario" name="comentario" placeholder="Cuéntanos algo del fútbol... tu jugador favorito, un partido memorable, etc." required></textarea>
+        </div>
+        <div class="msg-success" id="msg-ok">¡Comentario enviado exitosamente! ⚽</div>
+        <button type="submit" class="btn-submit">Enviar Comentario →</button>
+      </form>
+
+      <div>
+        <p class="comments-list-title">Comentarios de la Afición</p>
+        <div id="lista-comentarios">
+          <p class="no-comments" id="no-comments-msg">Sé el primero en comentar ⚽</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p>Proyecto de Aplicación — Desarrollo Web &nbsp;|&nbsp; Hobby: <span>Fútbol</span></p>
+    <p style="margin-top:0.5rem">Asturias Corporación Universitaria &nbsp;·&nbsp; 2024</p>
+  </footer>
+
+  <script>
+    // ===== FORMULARIO: Envío y visualización de comentarios =====
+    const form = document.getElementById('comentario-form');
+    const listaComentarios = document.getElementById('lista-comentarios');
+    const msgOk = document.getElementById('msg-ok');
+    const noCommentsMsg = document.getElementById('no-comments-msg');
+
+    async function cargarComentarios() {
+      try {
+        const res = await fetch('/api/comentarios');
+        const data = await res.json();
+        renderComentarios(data.comentarios);
+      } catch (e) {
+        console.error('Error cargando comentarios:', e);
+      }
+    }
+
+    function renderComentarios(comentarios) {
+      if (!comentarios || comentarios.length === 0) {
+        listaComentarios.innerHTML = '<p class="no-comments">Sé el primero en comentar ⚽</p>';
+        return;
+      }
+      listaComentarios.innerHTML = '';
+      [...comentarios].reverse().forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'comment-card';
+        card.innerHTML = `
+          <div class="comment-meta">
+            <span class="comment-author">${escapeHtml(c.nombre)}</span>
+            <span class="comment-equipo">${escapeHtml(c.equipo)}</span>
+          </div>
+          <p class="comment-text">${escapeHtml(c.comentario)}</p>
+          <p class="comment-date">${c.fecha}</p>
+        `;
+        listaComentarios.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value.trim();
+      const equipo = document.getElementById('equipo').value;
+      const comentario = document.getElementById('comentario').value.trim();
+
+      if (!nombre || !comentario) return;
+
+      try {
+        const res = await fetch('/api/comentarios', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, equipo, comentario })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          msgOk.style.display = 'block';
+          form.reset();
+          setTimeout(() => { msgOk.style.display = 'none'; }, 3000);
+          cargarComentarios();
+        }
+      } catch (e) {
+        console.error('Error enviando comentario:', e);
+      }
+    });
+
+    // Cargar comentarios al iniciar
+    cargarComentarios();
+
+    // ===== SMOOTH SCROLL =====
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+</body>
+</html>
